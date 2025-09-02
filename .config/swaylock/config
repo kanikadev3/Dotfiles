@@ -1,0 +1,24 @@
+ignore-empty-password
+disable-caps-lock-text
+font=Fira Sans
+indicator
+indicator-radius=120
+indicator-thickness=20
+clock
+timestr=%I:%M %p
+datestr=%A, %d %B
+
+image=/home/charalambos/Pictures/papes/1743295573265018.png 
+scaling=fit
+effect-blur=7x5
+effect-vignette=0.5:0.5
+
+color=11111111
+indicator-thickness=7
+ring-color=00000033
+#key-hl-color=6d33ff
+layout-bg-color=111826
+layout-border-color=00aa84
+layout-text-color=ffffff
+text-color=edebdf
+inside-color=00000088

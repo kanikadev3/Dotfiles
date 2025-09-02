@@ -7,14 +7,15 @@ local tab_style = "square"
 local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices.
-
+config.enable_wayland = false
 -- For example, changing the initial geometry for new windows:
 config.initial_cols = 120
 config.initial_rows = 28
 
 -- or, changing the font size and color scheme.
 config.font_size = 12
-config.font = wezterm.font 'Fira Code'
+-- config.font = wezterm.font 'JetBrains Mono'
+config.font = wezterm.font 'FiraCode'
 -- config.color_scheme = 'AlienBlood'
 
 --tab bar
@@ -49,6 +50,6 @@ config.launch_menu = {
 --    cwd = "~/Projects"
 --  }
 }
-config.default_prog = {"/run/current-system/sw/bin/fish"}
+-- config.default_prog = {"/run/current-system/sw/bin/fish"}
 -- Finally, return the configuration to wezterm:
 return config
