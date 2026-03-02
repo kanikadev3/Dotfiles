@@ -1,4 +1,8 @@
 @define-color default-background rgba(0, 0, 0, 0);
+@define-color yellow #FABD2F;
+@define-color gray #928374;
+@define-color green #B8BB26;
+
 * {
     font-family: "Fira Sans Semibold", "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
     font-size: 14px;  /* Slightly smaller font size */
@@ -16,7 +20,18 @@
     min-height: 0;
     /*margin: 0.2em 0.3em 0.2em 0.3em; */
 }
+/* river */
+#tags button {
+  color: @gray;
+}
 
+#tags button.occupied {
+  color: @white;
+}
+
+#tags button.focused{
+  color: @yellow;
+}
 /* The whole bar */
 #waybar {
     background-color: rgba(0, 0, 0, 0.7);

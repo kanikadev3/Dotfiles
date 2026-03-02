@@ -3,8 +3,8 @@
     "layer": "top",
     "height": 30, 
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces", "hyprland/mode"],
-    "modules-center": ["hyprland/window"],
+    "modules-left": ["river/tags", "river/mode"],
+    "modules-center": ["river/window"],
     "modules-right": ["backlight", "pulseaudio", "disk", "memory", "cpu", "battery", "network", "clock"],
 
     "hyprland/workspaces": {

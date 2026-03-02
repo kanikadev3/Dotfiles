@@ -16,7 +16,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = "a"
@@ -29,11 +29,18 @@ vim.o.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-	vim.o.clipboard = "unnamedplus"
+    vim.o.clipboard = "unnamedplus"
 end)
 
 -- Enable break indent
 vim.o.breakindent = true
+
+-- Enable line wrapping at word boundaries
+vim.opt.linebreak = true
+
+vim.opt.termguicolors = true
+-- Show a marker at the start of wrapped lines
+vim.opt.showbreak = ">> " -- You can choose any string you like
 
 -- Save undo history
 vim.o.undofile = true
@@ -67,7 +74,7 @@ vim.o.splitbelow = true
 --vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.opt.tabstop = 2
-vim.opt.shiftwidth = 4 
+vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 2
 vim.opt.expandtab = true
 -- Preview substitutions live, as you type!
@@ -117,6 +124,14 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+
+-- Disable PageUp and PageDown in Normal, Insert, and Visual modes
+vim.keymap.set({ 'n', 'i', 'v' }, '<PageUp>', '<Nop>', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<PageDown>', '<Nop>', { noremap = true, silent = true })
+
+-- close current buffer
+vim.keymap.set("n", "<leader>bd", "<cmd>bd<CR>")
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -130,56 +145,57 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 --  Try it with `yap` in normal mode
 --  See `:help vim.hl.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.hl.on_yank()
-	end,
+    desc = "Highlight when yanking (copying) text",
+    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
 })
 
 require("config.lazy")
+-- vim.lsp.enable({"ts_ls"})
 
-        -- vim.lsp.enable('ts_ls')
-        -- vim.lsp.config['ts_ls'] = {
-        --     -- Command and arguments to start the server.
-        --     --cmd = { 'lua-language-server' },
-        --     -- Filetypes to automatically attach to.
-        --     --filetypes = { 'lua' },
-        --     -- Sets the "workspace" to the directory where any of these files is found.
-        --     -- Files that share a root directory will reuse the LSP server connection.
-        --     -- Nested lists indicate equal priority, see |vim.lsp.Config|.
-        --     -- root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
-        --     -- Specific settings to send to the server. The schema is server-defined.
-        --     -- Example: https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
-        --     settings = {
-        --         typescript = {
-        --             inlayHints = {
-        --
-        --                 includeInlayParameterNameHints = "all",
-        --                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        --                 includeInlayFunctionParameterTypeHints = true,
-        --                 includeInlayVariableTypeHints = true,
-        --                 includeInlayPropertyDeclarationTypeHints = true,
-        --                 includeInlayFunctionLikeReturnTypeHints = true,
-        --                 includeInlayEnumMemberValueHints = true,
-        --             }
-        --         }
-        --     }
-        -- }
-        -- vim.lsp.enable('lua-language-server')
-        --
-        --
-        -- -- vim.lsp.config['lua-language-server'] = {
-        -- --     cmd = { "lua-language-server" },
-        -- --     filetypes = { "lua" },
-        -- --     root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".git" },
-        -- --     settings = {
-        -- --         Lua = {
-        -- --             runtime = { version = "LuaJIT" },
-        -- --             diagnostics = { globals = { "vim" } },
-        -- --             workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-        -- --             telemetry = { enable = false },
-        -- --         },
-        -- --     },
-        -- -- }
-        -- vim.lsp.enable('rust-analyzer')
+-- vim.lsp.enable('ts_ls')
+-- vim.lsp.config['ts_ls'] = {
+--     -- Command and arguments to start the server.
+--     --cmd = { 'lua-language-server' },
+--     -- Filetypes to automatically attach to.
+--     --filetypes = { 'lua' },
+--     -- Sets the "workspace" to the directory where any of these files is found.
+--     -- Files that share a root directory will reuse the LSP server connection.
+--     -- Nested lists indicate equal priority, see |vim.lsp.Config|.
+--     -- root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
+--     -- Specific settings to send to the server. The schema is server-defined.
+--     -- Example: https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
+--     settings = {
+--         typescript = {
+--             inlayHints = {
+--
+--                 includeInlayParameterNameHints = "all",
+--                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+--                 includeInlayFunctionParameterTypeHints = true,
+--                 includeInlayVariableTypeHints = true,
+--                 includeInlayPropertyDeclarationTypeHints = true,
+--                 includeInlayFunctionLikeReturnTypeHints = true,
+--                 includeInlayEnumMemberValueHints = true,
+--             }
+--         }
+--     }
+-- }
+-- vim.lsp.enable('lua-language-server')
+--
+--
+-- -- vim.lsp.config['lua-language-server'] = {
+-- --     cmd = { "lua-language-server" },
+-- --     filetypes = { "lua" },
+-- --     root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".git" },
+-- --     settings = {
+-- --         Lua = {
+-- --             runtime = { version = "LuaJIT" },
+-- --             diagnostics = { globals = { "vim" } },
+-- --             workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+-- --             telemetry = { enable = false },
+-- --         },
+-- --     },
+-- -- }
+-- vim.lsp.enable('rust-analyzer')
