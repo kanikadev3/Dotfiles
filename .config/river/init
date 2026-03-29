@@ -11,12 +11,24 @@
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
 # mystuff
+riverctl keyboard-layout us,gr
+riverctl keyboard-layout -options "grp:alt_shift_toggle" us,gr
+
+#xdg portal fix ? 
+systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
+systemctl --user restart xdg-desktop-portal
+
+
 riverctl map normal Super E spawn thunar
 
 riverctl map normal Super D spawn wofi
 
+
 riverctl map normal Super Escape spawn swaylock
-# todo grimblast screenshot
+
+# grim screenshot
+riverctl map normal Super S spawn 'grim -g "$(slurp)" - | wl-copy'
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Super T spawn wezterm
@@ -170,4 +182,5 @@ rivertile -view-padding 0 -outer-padding 0 -main-ratio 0.5 &
 
 # todo send to other file or exec once
 waybar &
+mako &
 swaybg -o \* -i /home/charalambos/Pictures/papes/1743295573265018.png -m fill

@@ -63,13 +63,13 @@ config.keys = {
         key = "d", mods = "CTRL|SHIFT", action = wezterm.action.ShowLauncher
     },
     {
-        key = 's',
+        key = 'v',
         mods = 'LEADER',
         action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
     },
 
     {
-        key = 'v',
+        key = 's',
         mods = 'LEADER',
         action = wezterm.action.SplitVertical {
             domain = 'CurrentPaneDomain'
@@ -91,8 +91,15 @@ config.keys = {
                 2000
             )
         end),
-    },
+    }
 }
+for i = 1, 9 do
+    table.insert(config.keys, {
+        key = tostring(i),
+        mods = 'LEADER',
+        action = wezterm.action.ActivateTab(i - 1),
+    })
+end
 -- show leader indicator
 local colors = {
     yellow = "#b57414",
