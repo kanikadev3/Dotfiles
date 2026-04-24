@@ -1,4 +1,9 @@
 
+;; TODO s ;;
+;;TODO Fix the indentation stuff
+
+
+
 ;;gui cleanup
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -61,10 +66,34 @@
 ;; Enable Evil
 (require 'evil)
 (evil-mode 1)
-;; enable mouse in tui
-(use-package clipetty
-  :ensure t
-  :hook (after-init . global-clipetty-mode))
+
+;; undo tree
+;(setq evil-undo-system 'undo-redo)   ;; Emacs 28+ native undo/redo
+;; or
+;(setq evil-undo-system 'undo-tree)   ;; Vim-like tree (most common)
+;; or
+;(setq evil-undo-system 'undo-fu)     ;; lightweight alternative
+
+
+(use-package undo-tree
+    :ensure t
+  :hook (after-init . global-undo-tree-mode)
+  ;:init
+  ;(global-undo-tree-mode 1)
+  )
+(evil-set-undo-system 'undo-tree)
+;;(undo-tree-mode)
+
+;; copy paste from tty to os
+(use-package xclip
+    :ensure t
+  :hook (after-init . xclip-mode)
+    )
+;; send paste from tty to OS
+;; (use-package clipetty
+;;   :ensure t
+;;   :hook (after-init . global-clipetty-mode))
+
     ;; adjust scroll speed
 (setq mouse-wheel-scroll-amount
       '(5
@@ -72,6 +101,8 @@
         ((meta))
         ((control meta) . global-text-scale)
         ((control) . text-scale)))
+
+
 
 (add-hook 'evil-insert-state-entry-hook (lambda () (send-string-to-terminal "\033[5 q")))
 (add-hook 'evil-insert-state-exit-hook  (lambda () (send-string-to-terminal "\033[2 q")))
@@ -115,10 +146,17 @@
      (make "https://github.com/alemuller/tree-sitter-make")
      (markdown "https://github.com/ikatyang/tree-sitter-markdown")
      (python "https://github.com/tree-sitter/tree-sitter-python")
+     (php "https://github.com/tree-sitter/tree-sitter-php")
      (toml "https://github.com/tree-sitter/tree-sitter-toml")
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . php-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
+
 (global-set-key [escape] 'keyboard-escape-quit)
 
 ;;todo lsp mode
@@ -154,7 +192,8 @@
 ;; optionally
 (unless (package-installed-p 'lsp-ui)
 (package-install 'lsp-ui))
-(use-package lsp-ui :commands lsp-ui-mode)
+(lsp-ui-mode -1)
+;; (use-package lsp-ui :commands lsp-ui-mode)
 ;;alt eglot: install the lsp on your machine and configure it here 
 ;;(use-package eglot
 ;;  :hook ((typescript-ts-mode tsx-ts-mode js-ts-mode) . eglot-ensure))
@@ -296,22 +335,27 @@
 ;;sane defaults
 (delete-selection-mode 1)    ;; You can select text and delete it by typing.
 ;;(electric-indent-mode -1)    ;; Turn off the weird indenting that Emacs does by default.
-    (electric-indent-mode 1)
             
     
 (electric-pair-mode 1)       ;; Turns on automatic parens pairing
 (auto-save-mode -1)
+(setq-default wrap-prefix "↪ ")
 
 ;; Zoom in and out
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-(global-set-key (kbd "C-c t x") #'xterm-mouse-mode)
+;; USE XCLIP ??
+(global-set-key (kbd "C-c t x") #'xterm-mouse-mode) 
 
 (global-set-key (kbd "C-c t e") #'evil-mode)
 (global-set-key (kbd "C-c c") 'comment-line)
-   
+
+;; search and replace, could also do C-c s r
+(global-set-key (kbd "C-c r") 'query-replace)
+(global-set-key (kbd "C-c R") 'query-replace-regexp)   
+
  ;;custom hotkeys
 (defun my/reload-config ()
   (interactive)
@@ -343,15 +387,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-;;tab space
-;; Source - https://stackoverflow.com/a
-;; Posted by alcortes, modified by community. See post 'Timeline' for change history
-;; Retrieved 2026-01-10, License - CC BY-SA 2.5
-(setq indent-tabs-mode nil)
-(setq tab-width 4)
-(setq indent-line-function 'insert-tab)
-(setq typescript-ts-mode-indent-offset 4) ;; insanity
 
+;;
+;;disable and reconfigure Emacs' default indent behavior 
+(indent-tabs-mode -1) ;;this will make it use spaces instead of tabs
+(electric-indent-mode -1) ;;disable atrocious electric indent 
+(global-set-key (kbd "RET") #'newline-and-indent) ;;dumb indent on new line
+(setq tab-always-indent nil) ;;remap tab to add indents 
+(setq tab-width 4)
 
 ;;my stuff
 
@@ -527,16 +570,6 @@
 ;; todo
 ;;(use-package magit
 ;;  :ensure t)
-
-;;todo enable electric-indent-mode
-;; set that to tabs 4
-;; magit-blame
-;(electric-indent-mode 1)
-;(setq indent-tabs-mode nil)
-;(setq tab-width 4)
-;(editorconfig-mode 1)
-;;(setq indent-line-function 'insert-tab)
-
     ;; yank highluight
 (require 'pulse)
 
@@ -551,13 +584,10 @@
 (advice-add 'evil-yank :after #'my/pulse-yank-advice)
 (advice-add 'evil-yank-line :after #'my/pulse-yank-advice)
 
+;;(xterm-mouse-mode 1)
 ;;     (use-package volatile-highlights
 ;;  :ensure t
 ;;  :config
 ;;  (volatile-highlights-mode 1))
     ;; to reload file do load_file enter enter
 ;; TODO rest
-
-
-
-
