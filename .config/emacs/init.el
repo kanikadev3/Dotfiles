@@ -16,7 +16,7 @@
         ("melpa" . "https://melpa.org/packages/")))
 
 (package-initialize)
-(package-refresh-contents)
+;;(package-refresh-contents)
 
 ;;use package should be installed by default?
 ;; package refresh contents updates the repos, could be done manually with m x package-refresh-contents?
@@ -96,7 +96,7 @@
 (evil-set-undo-system 'undo-tree)
 
 ;; Prevent undo tree files from polluting your git repo
-(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+(setq undo-tree-history-directory-alist '(("." . "~/.config/emacs/undo")))
 
 ;;(undo-tree-mode)
 
@@ -190,11 +190,11 @@
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
-(use-package lsp-tailwindcss
-    :ensure t
-  :after lsp-mode
-  :init
-  (setq lsp-tailwindcss-add-on-mode t))
+;(use-package lsp-tailwindcss
+;    :ensure t
+;  :after lsp-mode
+;  :init
+;  (setq lsp-tailwindcss-add-on-mode t))
 
 ;;errors
 (unless (package-installed-p 'flycheck)
@@ -271,6 +271,11 @@
         doom-modeline-persp-icon t)) ;; adds folder icon next to persp name
 
 ;;todo verb mode
+(use-package verb
+  :ensure t
+  :bind (("C-c C-r" . verb-command-map))
+  :config
+  (setq verb-auto-kill-response-buffers t))
 
 
 
@@ -296,6 +301,13 @@
 
 ;;todo org mode
 (setq org-agenda-files '("~/org/"))
+;; active Babel languages
+(org-babel-do-load-languages
+'org-babel-load-languages
+'((shell . t)))
+(use-package ox-gfm
+  :ensure t
+  :after org)
 
 ;;todo neotree
 (use-package neotree
@@ -398,28 +410,27 @@
 
 
 ;;sett load config open config etc
-(custom-set-variables
+;(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
-     "d481904809c509641a1a1f1b1eb80b94c58c210145effc2631c1a7f2e4a2fdf4"
-     "f1e8339b04aef8f145dd4782d03499d9d716fdc0361319411ac2efc603249326"
-     default))
- '(package-selected-packages
-   '(clipetty company-box consult dashboard dired-open doom-modeline
-	      doom-themes evil evil-collection evil-mc flycheck
-	      git-gutter lsp-tailwindcss lsp-ui magit neotree
-	      orderless peep-dired rainbow-mode undo-tree vertico
-	      xclip)))
-(custom-set-faces
+ ;'(custom-safe-themes
+ ;  '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
+ ;    "d481904809c509641a1a1f1b1eb80b94c58c210145effc2631c1a7f2e4a2fdf4"
+ ;    "f1e8339b04aef8f145dd4782d03499d9d716fdc0361319411ac2efc603249326"
+ ;    default))
+ ;'(package-selected-packages
+ ;  '(annalist company-box consult dashboard dired-open doom-modeline
+ ;             doom-themes evil-collection evil-mc flycheck git-gutter
+ ;             lsp-tailwindcss magit neotree orderless peep-dired
+ ;             rainbow-mode undo-tree vertico vterm xclip)))
+;(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+; )
 
 ;;
 ;;disable and reconfigure Emacs' default indent behavior 
@@ -621,6 +632,15 @@
 ;;backups
 (setq backup-directory-alist '(("." . "~/.emacs_backups")))
 
+;; tab bar mode
+(when (< 26 emacs-major-version)
+ (tab-bar-mode 1)                           ;; enable tab bar
+ (setq tab-bar-show 1)                      ;; hide bar if <= 1 tabs open
+ (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
+ (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
+ (setq tab-bar-tab-hints t)                 ;; show tab numbers
+  (setq tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+;; elements to include in ba
 ;;(xterm-mouse-mode 1)
 ;;     (use-package volatile-highlights
 ;;  :ensure t
@@ -628,3 +648,5 @@
 ;;  (volatile-highlights-mode 1))
     ;; to reload file do load_file enter enter
 ;; TODO rest
+
+
