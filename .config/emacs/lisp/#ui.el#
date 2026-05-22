@@ -1,0 +1,83 @@
+;;; ui.el --- ui pack -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+
+;;gui cleanup
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(blink-cursor-mode -1)
+
+;;enable which key
+(which-key-mode)
+;;show numbers
+(global-display-line-numbers-mode 1)
+(global-visual-line-mode t)
+
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (load-theme 'wombat t)) ;;set theme here
+;; ;transparency
+;; (add-to-list 'default-frame-alist '(alpha-background . 95)) ; For all new frames henceforth
+(load-theme 'wombat t)
+
+;;todo modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-height 35      ;; sets modeline height
+        doom-modeline-bar-width 5    ;; sets right bar width
+        doom-modeline-persp-name t   ;; adds perspective name to modeline
+        doom-modeline-persp-icon t)) ;; adds folder icon next to persp name
+
+;;colors
+(use-package rainbow-mode
+  :ensure t
+  :diminish
+  :hook org-mode prog-mode)
+
+;;todo fonts
+;; This sets the default font on all graphical frames created after restarting Emacs.
+;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
+;; are not right unless I also add this method of setting the default font.
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-11"))
+;; Uncomment the following line if line spacing needs adjusting.
+(setq-default line-spacing 0.12)
+
+;; tab bar mode
+;; (when (< 26 emacs-major-version)
+;;  (tab-bar-mode 1)                           ;; enable tab bar
+;;  (setq tab-bar-show 1)                      ;; hide bar if <= 1 tabs open
+;;  (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
+;;  (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
+;;  (setq tab-bar-tab-hints t)                 ;; show tab numbers
+;;  (setq tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode +1))
+
+;;todo neotree
+(use-package neotree
+  :ensure t
+  :config
+  (setq neo-smart-open t
+        neo-show-hidden-files t
+        neo-window-width 55
+        neo-window-fixed-size nil
+        inhibit-compacting-font-caches t
+        projectile-switch-project-action 'neotree-projectile-action) 
+        ;; truncate long file names in neotree
+        (add-hook 'neo-after-create-hook
+           #'(lambda (_)
+               (with-current-buffer (get-buffer neo-buffer-name)
+                 (setq truncate-lines t)
+                 (setq word-wrap nil)
+                 (make-local-variable 'auto-hscroll-mode)
+                 (setq auto-hscroll-mode nil)))))
+
+(provide 'ui)
+;;; ui.el ends here
