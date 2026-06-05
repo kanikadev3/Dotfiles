@@ -5,3 +5,10 @@
 /.config/emacs/recentf
 /.config/emacs/init.el~
 /.config/emacs/.lsp-session-v1
+.config/emacs/auto-save-list
+.config/emacs/eln-cache
+.config/emacs/eshell
+.config/emacs/lsp-cache
+.config/emacs/undo
+.config/emacs/projects
+.config/emacs/.mc-lists.el
