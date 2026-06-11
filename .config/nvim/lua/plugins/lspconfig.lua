@@ -188,6 +188,9 @@ return {
                     }
                 },
             },
+            phpactor = {
+                capabilities = capabilities
+            },
             phptools = {},
             clangd = {
                 capabilities = capabilities
